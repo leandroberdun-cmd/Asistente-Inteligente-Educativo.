@@ -1,811 +1,472 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EduIA - Asistente Inteligente</title>
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #0b1020;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-}
-
-/* BARRA LATERAL */
-
-.sidebar {
-    width: 250px;
-    background: #111a2e;
-    padding: 25px 18px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #26334d;
-}
-
-.logo {
-    font-size: 26px;
-    font-weight: bold;
-    color: #9b8cff;
-    margin-bottom: 35px;
-}
-
-.logo span {
-    color: #53d6c4;
-}
-
-.new-chat {
-    background: #28234b;
-    color: white;
-    border: 1px solid #7665d9;
-    padding: 13px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-bottom: 30px;
-    font-size: 14px;
-}
-
-.new-chat:hover {
-    background: #403575;
-}
-
-.side-title {
-    color: #8795b0;
-    font-size: 11px;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-}
-
-.subject {
-    background: transparent;
-    border: none;
-    color: #aab7ce;
-    padding: 13px;
-    text-align: left;
-    border-radius: 9px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.subject:hover,
-.subject.active {
-    background: #25304c;
-    color: white;
-}
-
-.bottom {
-    margin-top: auto;
-}
-
-.theme {
-    width: 100%;
-    background: transparent;
-    border: 1px solid #34415c;
-    color: white;
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-/* CONTENIDO PRINCIPAL */
-
-.main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.topbar {
-    height: 65px;
-    border-bottom: 1px solid #26334d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5%;
-    color: #aab7ce;
-    font-size: 13px;
-}
-
-.online {
-    color: #53d6a5;
-}
-
-/* INICIO */
-
-.welcome {
-    text-align: center;
-    width: 90%;
-    max-width: 850px;
-    margin: 65px auto 30px;
-}
-
-.eyebrow {
-    color: #53d6c4;
-    letter-spacing: 3px;
-    font-size: 11px;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-    line-height: 1.2;
-}
-
-h1 span {
-    background: linear-gradient(90deg,#a18aff,#53d6c4);
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-.description {
-    color: #98a6bf;
-    line-height: 1.7;
-    font-size: 14px;
-    max-width: 500px;
-    margin: auto;
-}
-
-/* TARJETAS */
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 15px;
-    margin-top: 40px;
-}
-
-.card {
-    background: #141e33;
-    border: 1px solid #293650;
-    border-radius: 13px;
-    padding: 20px;
-    text-align: left;
-    cursor: pointer;
-    transition: .2s;
-    color: white;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: #927fff;
-    background: #1d2943;
-}
-
-.card .emoji {
-    font-size: 25px;
-    margin-bottom: 12px;
-}
-
-.card h3 {
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.card p {
-    font-size: 12px;
-    color: #94a2bd;
-    line-height: 1.5;
-}
-
-/* CHAT */
-
-.chat {
-    width: 90%;
-    max-width: 850px;
-    margin: 0 auto 200px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.message {
-    display: flex;
-    gap: 12px;
-    max-width: 90%;
-    animation: aparecer .3s ease;
-}
-
-.message.user {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-}
-
-.avatar {
-    width: 35px;
-    height: 35px;
-    background: #243653;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-}
-
-.assistant .avatar {
-    background: #17423e;
-}
-
-.bubble {
-    background: #141e33;
-    border: 1px solid #293650;
-    padding: 15px;
-    border-radius: 5px 15px 15px 15px;
-    font-size: 14px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-
-.user .bubble {
-    background: #29254e;
-    border-color: #514784;
-    border-radius: 15px 5px 15px 15px;
-}
-
-.label {
-    display: block;
-    font-size: 11px;
-    color: #91a0bc;
-    margin-bottom: 7px;
-    font-weight: bold;
-}
-
-/* ESCRITORIO DE MENSAJES */
-
-.composer-area {
-    position: fixed;
-    bottom: 0;
-    left: 250px;
-    right: 0;
-    padding: 20px 5% 12px;
-    background: linear-gradient(transparent,#0b1020 20%);
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-    margin: 0 auto 10px;
-    max-width: 850px;
-}
-
-.actions button {
-    background: transparent;
-    color: #aab7ce;
-    border: 1px solid #34415c;
-    border-radius: 20px;
-    padding: 8px 13px;
-    font-size: 11px;
-    cursor: pointer;
-}
-
-.actions button:hover {
-    border-color: #927fff;
-}
-
-.composer {
-    max-width: 850px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #141e33;
-    border: 1px solid #405071;
-    border-radius: 15px;
-    padding: 10px 12px 10px 17px;
-}
-
-.composer textarea {
-    flex: 1;
-    background: transparent;
-    color: white;
-    border: none;
-    outline: none;
-    resize: none;
-    font-family: Arial;
-    font-size: 14px;
-    padding: 10px 0;
-    max-height: 110px;
-}
-
-.send {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 11px;
-    background: linear-gradient(135deg,#9582ff,#53d6c4);
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-}
-
-.send:hover {
-    transform: scale(1.05);
-}
-
-.warning {
-    text-align: center;
-    font-size: 10px;
-    color: #71809c;
-    margin-top: 10px;
-}
-
-/* MODO CLARO */
-
-body.light {
-    background: #f1f3fa;
-    color: #172039;
-}
-
-body.light .sidebar,
-body.light .card,
-body.light .bubble,
-body.light .composer {
-    background: white;
-    color: #172039;
-}
-
-body.light .topbar {
-    border-color: #dce2ef;
-}
-
-body.light .composer-area {
-    background: linear-gradient(transparent,#f1f3fa 20%);
-}
-
-body.light .composer textarea {
-    color: #172039;
-}
-
-body.light .subject,
-body.light .theme {
-    color: #34415c;
-}
-
-body.light .description,
-body.light .card p {
-    color: #68748b;
-}
-
-body.light .card {
-    border-color: #dce2ef;
-}
-
-/* ANIMACIONES */
-
-@keyframes aparecer {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* CELULARES */
-
-@media(max-width:760px) {
-
-    .sidebar {
-        width: 65px;
-        padding: 15px 7px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProfeAmigo — Tu asistente de estudio</title>
+  <style>
+    :root {
+      --purple: #6654e8;
+      --purple-dark: #4c3bc7;
+      --ink: #25243a;
+      --muted: #77768a;
+      --page: #f5f4fb;
+      --line: #e9e7f2;
+      --white: #fff;
     }
 
-    .logo {
-        font-size: 0;
-        text-align: center;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     }
 
-    .logo:first-letter {
-        font-size: 25px;
+    .app {
+      width: min(100%, 1100px);
+      height: 100vh;
+      min-height: 600px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      background: var(--white);
+      box-shadow: 0 12px 50px #332b6412;
     }
 
-    .new-chat,
-    .side-title,
-    .subject span,
-    .theme span {
-        display: none;
+    aside {
+      padding: 28px 20px;
+      color: var(--white);
+      background: linear-gradient(160deg, #7161f0, #5142ca);
+      display: flex;
+      flex-direction: column;
     }
 
-    .subject {
-        text-align: center;
-        font-size: 19px;
-        padding: 12px 5px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
     }
 
-    .theme {
-        font-size: 18px;
-        padding: 10px 2px;
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #ffffff25;
+      font-size: 23px;
     }
 
-    .composer-area {
-        left: 65px;
-        padding-left: 3%;
-        padding-right: 3%;
+    .brand h1 { margin: 0; font-size: 18px; }
+    .brand p { margin: 3px 0 0; color: #e2dfff; font-size: 12px; }
+
+    .side-label {
+      margin: 0 0 10px;
+      color: #e1ddff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
     }
 
-    .welcome {
-        margin-top: 40px;
+    .field { margin-bottom: 22px; }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ffffff3b;
+      border-radius: 11px;
+      outline: none;
+      color: white;
+      background: #ffffff18;
+      font: inherit;
     }
 
-    h1 {
-        font-size: 34px;
+    select option { color: var(--ink); }
+
+    .tip {
+      margin-top: auto;
+      padding: 15px;
+      border: 1px solid #ffffff30;
+      border-radius: 14px;
+      color: #f1efff;
+      background: #ffffff12;
+      font-size: 13px;
+      line-height: 1.55;
     }
 
-    .cards {
-        grid-template-columns: 1fr;
-        margin-top: 25px;
-    }
+    .tip strong { display: block; margin-bottom: 5px; color: white; }
 
-    .card {
-        padding: 13px;
-    }
-
-    .chat {
-        margin-bottom: 190px;
+    main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .topbar {
-        padding: 0 4%;
+      min-height: 78px;
+      padding: 16px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
     }
-}
-</style>
+
+    .topbar h2 { margin: 0; font-size: 16px; }
+    .status { color: var(--muted); font-size: 12px; }
+
+    .demo-badge {
+      padding: 7px 10px;
+      border-radius: 20px;
+      color: #6654c9;
+      background: #f0edff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px clamp(18px, 5vw, 58px);
+      scroll-behavior: smooth;
+    }
+
+    .welcome {
+      max-width: 590px;
+      margin: 35px auto 28px;
+      text-align: center;
+    }
+
+    .welcome-icon {
+      width: 62px;
+      height: 62px;
+      margin: auto auto 15px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: #f0edff;
+      font-size: 31px;
+    }
+
+    .welcome h3 { margin: 0 0 8px; font-size: 25px; }
+    .welcome p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 21px;
+    }
+
+    .suggestion {
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: #5143bd;
+      background: white;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      transition: .15s;
+    }
+
+    .suggestion:hover { border-color: var(--purple); background: #faf9ff; }
+
+    .message {
+      display: flex;
+      gap: 10px;
+      max-width: 760px;
+      margin: 17px auto;
+      align-items: flex-start;
+    }
+
+    .message.user { flex-direction: row-reverse; }
+
+    .avatar {
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: #f0edff;
+      font-size: 16px;
+    }
+
+    .user .avatar { background: #e9f4ff; }
+
+    .bubble {
+      max-width: min(82%, 620px);
+      padding: 12px 15px;
+      border: 1px solid var(--line);
+      border-radius: 4px 15px 15px;
+      background: white;
+      line-height: 1.6;
+      font-size: 14px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .user .bubble {
+      border: 0;
+      border-radius: 15px 4px 15px 15px;
+      color: white;
+      background: var(--purple);
+    }
+
+    .typing { color: var(--muted); font-size: 13px; font-style: italic; }
+
+    .composer-wrap {
+      padding: 14px clamp(18px, 5vw, 58px) 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .composer {
+      max-width: 760px;
+      margin: auto;
+      padding: 8px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      border: 1px solid #dedbea;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 4px 18px #28204d08;
+    }
+
+    textarea {
+      flex: 1;
+      min-height: 42px;
+      max-height: 130px;
+      padding: 11px 9px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    textarea::placeholder { color: #a09eae; }
+
+    .send {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 12px;
+      color: white;
+      background: var(--purple);
+      cursor: pointer;
+      font-size: 18px;
+      transition: .15s;
+    }
+
+    .send:hover { background: var(--purple-dark); }
+    .send:disabled { opacity: .5; cursor: wait; }
+
+    .fine-print {
+      margin: 9px 0 0;
+      color: #9694a4;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    @media (max-width: 700px) {
+      .app { display: flex; flex-direction: column; min-height: 100vh; height: 100vh; }
+      aside { padding: 12px 16px; display: block; }
+      .brand { margin: 0 0 12px; }
+      .brand-icon { width: 36px; height: 36px; }
+      .field-row { display: flex; gap: 10px; }
+      .field { flex: 1; margin: 0; }
+      .side-label { margin-bottom: 6px; font-size: 10px; }
+      aside select { padding: 9px; font-size: 12px; }
+      .tip { display: none; }
+      .topbar { min-height: 56px; padding: 10px 16px; }
+      .chat { padding: 14px; }
+      .welcome { margin: 18px auto; }
+      .welcome h3 { font-size: 22px; }
+      .composer-wrap { padding: 10px 12px 14px; }
+      .bubble { font-size: 13px; }
+    }
+  </style>
 </head>
-
 <body>
-
-<!-- BARRA LATERAL -->
-
-<aside class="sidebar">
-
-    <div class="logo">✦ Edu<span>IA</span></div>
-
-    <button class="new-chat" onclick="newChat()">
-        ＋ Nueva consulta
-    </button>
-
-    <div class="side-title">MATERIAS</div>
-
-    <button class="subject active" onclick="selectSubject(this,'General')">✧ <span>General</span></button>
-    <button class="subject" onclick="selectSubject(this,'Historia')">◷ <span>Historia</span></button>
-    <button class="subject" onclick="selectSubject(this,'Matemática')">∑ <span>Matemática</span></button>
-    <button class="subject" onclick="selectSubject(this,'Biología')">♧ <span>Biología</span></button>
-    <button class="subject" onclick="selectSubject(this,'Geografía')">◎ <span>Geografía</span></button>
-    <button class="subject" onclick="selectSubject(this,'Inglés')">文 <span>Inglés</span></button>
-    <button class="subject" onclick="selectSubject(this,'Tecnología')">⌘ <span>Tecnología</span></button>
-
-    <div class="bottom">
-        <button class="theme" onclick="toggleTheme()">
-            ☼ <span>Cambiar apariencia</span>
-        </button>
-    </div>
-
-</aside>
-
-<!-- CONTENIDO -->
-
-<main class="main">
-
-    <header class="topbar">
-        <span><span class="online">●</span> <span id="currentSubject">Materia: General</span></span>
-        <span>APRENDER · PREGUNTAR · CRECER</span>
-    </header>
-
-    <!-- BIENVENIDA -->
-
-    <section class="welcome" id="welcome">
-
-        <div class="eyebrow">✦ TU ESPACIO PARA APRENDER</div>
-
-        <h1>
-            ¡Hola! ¿Qué vamos a<br>
-            <span>aprender hoy?</span>
-        </h1>
-
-        <p class="description">
-            Soy EduIA, tu asistente de estudio.
-            Preguntame lo que necesites y vamos
-            a resolverlo juntos.
-        </p>
-
-        <div class="cards">
-
-            <div class="card" onclick="suggest('Explicame las causas de la Revolución Industrial.')">
-                <div class="emoji">◷</div>
-                <h3>Historia</h3>
-                <p>Aprendé sobre la Revolución Industrial.</p>
-            </div>
-
-            <div class="card" onclick="suggest('Explicame cómo resolver ecuaciones de primer grado.')">
-                <div class="emoji">∑</div>
-                <h3>Matemática</h3>
-                <p>Aprendé ecuaciones paso a paso.</p>
-            </div>
-
-            <div class="card" onclick="suggest('¿Qué función cumplen las mitocondrias?')">
-                <div class="emoji">♧</div>
-                <h3>Biología</h3>
-                <p>Conocé las partes de la célula.</p>
-            </div>
-
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+          <h1>ProfeAmigo</h1>
+          <p>Tu compañero de estudio</p>
         </div>
+      </div>
 
-    </section>
-
-    <!-- HISTORIAL DEL CHAT -->
-
-    <section class="chat" id="chat"></section>
-
-    <!-- FORMULARIO -->
-
-    <section class="composer-area">
-
-        <div class="actions">
-            <button onclick="quickAction('resumen')">✧ Resumir tema</button>
-            <button onclick="quickAction('traducir')">文 Traducir al inglés</button>
+      <div class="field-row">
+        <div class="field">
+          <p class="side-label">Tu curso</p>
+          <select id="course" aria-label="Elegí tu curso">
+            <option>1° año</option>
+            <option>2° año</option>
+            <option>3° año</option>
+            <option>4° año</option>
+            <option>5° año</option>
+            <option>6° año</option>
+          </select>
         </div>
+        <div class="field">
+          <p class="side-label">Materia</p>
+          <select id="subject" aria-label="Elegí una materia">
+            <option>General</option>
+            <option>Matemática</option>
+            <option>Lengua</option>
+            <option>Ciencias</option>
+            <option>Historia</option>
+            <option>Inglés</option>
+          </select>
+        </div>
+      </div>
 
-        <form class="composer" id="chatForm">
+      <div class="tip">
+        <strong>💡 Una buena forma de aprender</strong>
+        Contame qué intentaste y en qué parte te trabaste. Así puedo orientarte mejor.
+      </div>
+    </aside>
 
-            <textarea
-                id="question"
-                placeholder="Escribí tu pregunta..."
-                rows="1"
-                maxlength="2000"
-            ></textarea>
+    <main>
+      <header class="topbar">
+        <div>
+          <h2>Asistente educativo</h2>
+          <span class="status">Preguntá con confianza</span>
+        </div>
+        <span class="demo-badge">MODO DEMO</span>
+      </header>
 
-            <button class="send" type="submit">↑</button>
+      <section class="chat" id="chat" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon">✨</div>
+          <h3>¡Hola! ¿Qué querés aprender?</h3>
+          <p>
+            Estoy acá para ayudarte a estudiar paso a paso.
+            Elegí una materia o escribime tu pregunta.
+          </p>
+          <div class="suggestions">
+            <button class="suggestion">Ayudame con una cuenta</button>
+            <button class="suggestion">Explicame la fotosíntesis</button>
+            <button class="suggestion">Quiero practicar inglés</button>
+          </div>
+        </div>
+      </section>
 
+      <div class="composer-wrap">
+        <form class="composer" id="form">
+          <textarea id="input" rows="1" placeholder="Escribí tu pregunta..." aria-label="Escribí tu pregunta"></textarea>
+          <button class="send" id="send" type="submit" aria-label="Enviar mensaje">➤</button>
         </form>
+        <p class="fine-print">ProfeAmigo puede equivocarse. Para tareas importantes, revisá también tus apuntes.</p>
+      </div>
+    </main>
+  </div>
 
-        <p class="warning">
-            EduIA puede equivocarse. Verificá la información antes de utilizarla.
-        </p>
+  <script>
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+    const sendButton = document.getElementById("send");
+    const welcome = document.getElementById("welcome");
 
-    </section>
+    function addMessage(text, sender) {
+      const row = document.createElement("div");
+      row.className = `message ${sender}`;
 
-</main>
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = sender === "user" ? "🙂" : "📚";
 
-<script>
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
 
-// VARIABLES
-
-let materia = "General";
-let historial = [];
-
-// ELEMENTOS
-
-const chat = document.getElementById("chat");
-const input = document.getElementById("question");
-const welcome = document.getElementById("welcome");
-
-// SELECCIONAR MATERIA
-
-function selectSubject(button, name) {
-
-    document.querySelectorAll(".subject").forEach(b => {
-        b.classList.remove("active");
-    });
-
-    button.classList.add("active");
-
-    materia = name;
-
-    document.getElementById("currentSubject").textContent =
-        "Materia: " + materia;
-}
-
-// AGREGAR MENSAJE
-
-function addMessage(type, text) {
-
-    welcome.style.display = "none";
-
-    const message = document.createElement("div");
-    message.className = "message " + type;
-
-    const avatar = document.createElement("div");
-    avatar.className = "avatar";
-    avatar.textContent = type === "assistant" ? "✦" : "T";
-
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-
-    const label = document.createElement("span");
-    label.className = "label";
-    label.textContent = type === "assistant" ? "EduIA" : "Tu consulta";
-
-    const content = document.createElement("div");
-    content.textContent = text;
-
-    bubble.appendChild(label);
-    bubble.appendChild(content);
-
-    message.appendChild(avatar);
-    message.appendChild(bubble);
-
-    chat.appendChild(message);
-
-    message.scrollIntoView({
-        behavior: "smooth",
-        block: "end"
-    });
-
-    return message;
-}
-
-// RESPUESTAS DE DEMOSTRACIÓN
-
-function generateAnswer(question) {
-
-    const q = question.toLowerCase();
-
-    if (q.includes("hola")) {
-        return "¡Hola! Soy EduIA. Estoy acá para ayudarte a estudiar. ¿Qué tema querés aprender hoy?";
+      row.append(avatar, bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+      return row;
     }
 
-    if (q.includes("mitocondria") || q.includes("célula")) {
-        return "La mitocondria es un orgánulo de la célula que produce la mayor parte de la energía que necesita para funcionar. Por eso se la suele llamar la central energética de la célula.";
+    function getReply(question) {
+      const q = question.toLowerCase();
+      const course = document.getElementById("course").value;
+      const subject = document.getElementById("subject").value;
+
+      if (q.includes("fotosíntesis")) {
+        return `¡Vamos paso a paso! La fotosíntesis es el proceso por el que las plantas producen su alimento. Usan luz del sol, agua y dióxido de carbono, y producen glucosa y oxígeno.\n\nUna forma simple de recordarlo: luz + agua + dióxido de carbono → alimento + oxígeno.\n\n¿Querés que te lo explique con un ejemplo o que te haga unas preguntas para practicar?`;
+      }
+
+      if (q.includes("inglés") || q.includes("english") || q.includes("practicar inglés")) {
+        return `¡Dale! Practiquemos inglés. Una frase útil es “I am studying” — significa “Estoy estudiando”.\n\nProbá escribir una oración corta en inglés y te ayudo a corregirla. ¿Sobre qué tema querés practicar?`;
+      }
+
+      if (q.includes("cuenta") || q.includes("matem") || /[0-9]\s*[\+\-×x÷\/]\s*[0-9]/.test(q)) {
+        return `¡Vamos con Matemática! Para resolver una cuenta, primero identificamos qué operación hay que hacer y después avanzamos paso a paso.\n\nEscribime la cuenta completa y contame qué intentaste. Te ayudo a encontrar el procedimiento, no solo el resultado.`;
+      }
+
+      if (q.includes("historia")) {
+        return `Para estudiar Historia, sirve ordenar los hechos en una línea de tiempo y preguntarse: ¿qué pasó?, ¿cuándo?, ¿quiénes participaron? y ¿por qué fue importante?\n\nDecime qué tema están viendo y lo organizamos juntos para ${course}.`;
+      }
+
+      if (q.includes("resumen") || q.includes("resumir")) {
+        return `¡Claro! Pegá el texto o contame el tema que necesitás resumir. Podemos separar las ideas principales de los detalles y después armar un resumen con tus propias palabras.`;
+      }
+
+      return `¡Buena pregunta! Vamos a trabajarla paso a paso. Estás en ${course} y elegiste ${subject}.\n\nContame un poco más: ¿qué tema están viendo y qué parte te resulta difícil? Si ya intentaste resolverlo, compartime tu procedimiento y lo revisamos juntos.`;
     }
 
-    if (q.includes("revolución industrial")) {
-        return "La Revolución Industrial comenzó en Inglaterra durante el siglo XVIII. Fue un proceso de grandes cambios económicos y sociales.\n\nSus principales características fueron:\n\n1. Aparición de máquinas.\n2. Desarrollo de fábricas.\n3. Crecimiento de las ciudades.\n4. Aumento de la producción.\n5. Cambios en el trabajo y en la sociedad.\n\nEn resumen, se pasó de una producción principalmente artesanal a una producción industrial.";
-    }
+    function sendMessage(text) {
+      const cleanText = text.trim();
+      if (!cleanText) return;
 
-    if (q.includes("ecuación") || q.includes("matemática")) {
-        return "Una ecuación es una igualdad matemática que tiene una incógnita.\n\nEjemplo:\n\nx + 5 = 12\n\nPaso 1: Pasamos el 5 restando.\nx = 12 - 5\n\nPaso 2: Resolvemos.\nx = 7\n\nLa respuesta es x = 7.";
-    }
+      welcome.style.display = "none";
+      addMessage(cleanText, "user");
+      input.value = "";
+      input.style.height = "42px";
+      sendButton.disabled = true;
 
-    if (q.includes("traduc")) {
-        return "Esta es una versión de demostración. Para traducir correctamente cualquier texto, necesitás conectar el proyecto con una herramienta de inteligencia artificial.";
-    }
+      const typing = addMessage("Pensando cómo ayudarte…", "assistant");
+      typing.querySelector(".bubble").classList.add("typing");
 
-    if (q.includes("resumen")) {
-        return "Para realizar un buen resumen, identificá las ideas principales, eliminá la información repetida y explicá el tema con tus propias palabras. Esta versión es de demostración y no analiza documentos automáticamente.";
-    }
-
-    if (materia === "Historia") {
-        return "En Historia es importante comprender los acontecimientos, sus causas y consecuencias.\n\nSobre tu consulta: " + question + "\n\nEsta es una respuesta de demostración. Para obtener una explicación más completa y personalizada, conectá el proyecto con una API de IA.";
-    }
-
-    if (materia === "Matemática") {
-        return "Vamos a trabajar el ejercicio paso a paso.\n\nTu consulta es: " + question + "\n\nEsta versión es de demostración. Para resolver ejercicios variados automáticamente, necesitás conectar una IA real.";
-    }
-
-    if (materia === "Biología") {
-        return "La Biología estudia a los seres vivos, sus características y sus procesos.\n\nTu consulta es: " + question + "\n\nEsta respuesta es de demostración. Una IA conectada puede desarrollar el tema con más precisión.";
-    }
-
-    return "¡Buena pregunta!\n\nTu consulta es: " + question + "\n\nSoy EduIA, tu asistente educativo. Esta versión funciona con respuestas de demostración programadas. Para responder preguntas nuevas de manera inteligente, hace falta conectar una API de inteligencia artificial.";
-}
-
-// ENVIAR PREGUNTA
-
-function sendQuestion(text) {
-
-    const question = text.trim();
-
-    if (question === "") {
-        alert("Por favor, escribí una pregunta.");
+      window.setTimeout(() => {
+        typing.remove();
+        addMessage(getReply(cleanText), "assistant");
+        sendButton.disabled = false;
         input.focus();
-        return;
+      }, 650);
     }
 
-    if (question.length > 2000) {
-        alert("La pregunta no puede superar los 2000 caracteres.");
-        return;
-    }
-
-    addMessage("user", question);
-
-    historial.push({
-        pregunta: question
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      sendMessage(input.value);
     });
 
-    input.value = "";
+    input.addEventListener("input", () => {
+      input.style.height = "42px";
+      input.style.height = Math.min(input.scrollHeight, 130) + "px";
+    });
 
-    setTimeout(() => {
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
 
-        const answer = generateAnswer(question);
-
-        addMessage("assistant", answer);
-
-        historial[historial.length - 1].respuesta = answer;
-
-    }, 700);
-}
-
-// FORMULARIO
-
-document.getElementById("chatForm").addEventListener("submit", function(e) {
-
-    e.preventDefault();
-
-    sendQuestion(input.value);
-
-});
-
-// PREGUNTAS SUGERIDAS
-
-function suggest(text) {
-    sendQuestion(text);
-}
-
-// NUEVO CHAT
-
-function newChat() {
-
-    chat.innerHTML = "";
-
-    historial = [];
-
-    welcome.style.display = "block";
-
-    input.value = "";
-
-    input.focus();
-}
-
-// MODO OSCURO / CLARO
-
-function toggleTheme() {
-
-    document.body.classList.toggle("light");
-
-}
-
-// RESUMEN Y TRADUCCIÓN
-
-function quickAction(action) {
-
-    const text = input.value.trim();
-
-    if (text === "") {
-
-        if (action === "resumen") {
-            input.value = "Haceme un resumen sobre: ";
-        } else {
-            input.value = "Traducí al inglés este texto: ";
-        }
-
-        input.focus();
-        return;
-    }
-
-    if (action === "resumen") {
-        sendQuestion("Haceme un resumen claro y sencillo sobre: " + text);
-    }
-
-    if (action === "traducir") {
-        sendQuestion("Traducí al inglés este texto: " + text);
-    }
-
-}
-
-// ENTER PARA ENVIAR
-
-input.addEventListener("keydown", function(e) {
-
-    if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        document.getElementById("chatForm").requestSubmit();
-    }
-
-});
-
-</script>
-
+    document.querySelectorAll(".suggestion").forEach((button) => {
+      button.addEventListener("click", () => sendMessage(button.textContent));
+    });
+  </script>
 </body>
 </html>
