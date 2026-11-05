@@ -1,1 +1,0 @@
-# Asistente-Inteligente-Educativo.
